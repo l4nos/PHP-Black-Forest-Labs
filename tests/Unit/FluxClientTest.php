@@ -153,6 +153,37 @@ class FluxClientTest extends TestCase
         $this->assertInstanceOf(FluxClient::class, $client);
     }
 
+    public function test_get_http_client_returns_guzzle_client(): void
+    {
+        $client = new FluxClient('test-api-key');
+        $httpClient = $client->getHttpClient();
+
+        $this->assertInstanceOf(\GuzzleHttp\Client::class, $httpClient);
+    }
+
+    public function test_get_http_client_returns_same_instance(): void
+    {
+        $client = new FluxClient('test-api-key');
+        $httpClient1 = $client->getHttpClient();
+        $httpClient2 = $client->getHttpClient();
+
+        $this->assertSame($httpClient1, $httpClient2);
+    }
+
+    public function test_get_http_client_has_correct_configuration(): void
+    {
+        $client = new FluxClient('test-api-key');
+        $httpClient = $client->getHttpClient();
+
+        $config = $httpClient->getConfig();
+        
+        $this->assertSame('https://api.bfl.ai/v1', $config['base_uri']->__toString());
+        $this->assertSame(30, $config['timeout']);
+        $this->assertSame('application/json', $config['headers']['Content-Type']);
+        $this->assertSame('application/json', $config['headers']['Accept']);
+        $this->assertSame('test-api-key', $config['headers']['x-key']);
+    }
+
     public function test_handles_empty_response_body(): void
     {
         $client = $this->createMockClient([
