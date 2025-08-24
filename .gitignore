@@ -1,0 +1,57 @@
+# Dependencies
+/vendor/
+composer.lock
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.phpunit.cache/
+coverage/
+coverage.xml
+.phpunit.result.cache
+
+# Code Analysis
+.php-cs-fixer.cache
+.phpstan.cache
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build artifacts
+build/
+dist/
+
+# Temporary files
+tmp/
+temp/
+
+# Examples generated files
+examples/*.jpg
+examples/*.png
+examples/generated_*
+examples/finetuned_*
+examples/sample_images/
+
+# Documentation build
+docs/_build/
+
+# Package files
+*.phar
+
+# Backup files
+*.bak
+*.backup

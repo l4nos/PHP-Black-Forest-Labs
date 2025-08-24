@@ -5,6 +5,8 @@ A professional PHP SDK for [Black Forest Labs' FLUX API](https://api.bfl.ai/), p
 [![Latest Version](https://img.shields.io/packagist/v/lanos/php-bfl.svg)](https://packagist.org/packages/lanos/php-bfl)
 [![PHP Version](https://img.shields.io/packagist/php-v/lanos/php-bfl.svg)](https://packagist.org/packages/lanos/php-bfl)
 [![License](https://img.shields.io/packagist/l/lanos/php-bfl.svg)](https://github.com/l4nos/php-bfl/blob/main/LICENSE)
+[![Tests](https://github.com/l4nos/php-bfl/workflows/Tests/badge.svg)](https://github.com/l4nos/php-bfl/actions)
+[![Coverage](https://codecov.io/gh/l4nos/php-bfl/branch/main/graph/badge.svg)](https://codecov.io/gh/l4nos/php-bfl)
 
 ## Features
 
@@ -358,11 +360,56 @@ For complete API documentation, see the [API Reference](docs/api-reference.md).
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Testing
+## Testing & Quality Assurance
+
+This package includes comprehensive testing across multiple PHP versions and dependency combinations.
+
+### Local Testing
 
 ```bash
+# Run all tests
 composer test
+
+# Run tests with coverage
+composer test-coverage
+
+# Run static analysis
+composer phpstan
+
+# Check code style
+composer cs-check
+
+# Fix code style
+composer cs-fix
+
+# Run all quality checks
+composer check-all
 ```
+
+### CI/CD Pipeline
+
+The package is automatically tested using GitHub Actions across:
+
+- **PHP Versions**: 8.1, 8.2, 8.3
+- **Dependencies**: `prefer-lowest` and `prefer-stable`
+- **Code Quality**: PHPStan (max level), PHP CS Fixer
+- **Security**: Composer audit and security advisories
+
+### Test Coverage
+
+- **100+ Unit Tests**: All components individually tested
+- **Integration Tests**: End-to-end workflow validation
+- **Mock-based**: Zero real API calls during testing
+- **Multiple Scenarios**: Success, error, and edge cases
+
+### Quality Gates
+
+All PRs must pass:
+- ✅ Tests on all PHP versions
+- ✅ Static analysis (PHPStan level max)
+- ✅ Code style (PSR-12 + custom rules)
+- ✅ Security audit
+- ✅ No known vulnerabilities
 
 ## License
 
