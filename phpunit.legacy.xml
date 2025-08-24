@@ -19,7 +19,17 @@
         </testsuite>
     </testsuites>
     <coverage
-        cacheDirectory=".phpunit.cache/code-coverage">
+        cacheDirectory=".phpunit.cache/code-coverage"
+        includeUncoveredFiles="true"
+        pathCoverage="false"
+        ignoreDeprecatedCodeUnits="true"
+        disableCodeCoverageIgnore="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory>src/DTOs</directory>
+        </exclude>
         <report>
             <html outputDirectory="coverage"/>
             <text outputFile="php://stdout" showUncoveredFiles="false"/>
