@@ -342,9 +342,544 @@ See the [`examples/`](examples/) directory for complete working examples:
 - [`examples/image_editing.php`](examples/image_editing.php) - Fill, expand, and control
 - [`examples/polling_patterns.php`](examples/polling_patterns.php) - Different polling strategies
 
-## API Reference
+## Complete API Reference
 
-For complete API documentation, see the [API Reference](docs/api-reference.md).
+This section provides comprehensive documentation for all available SDK methods and endpoints.
+
+### FluxClient
+
+The main client class providing access to all services.
+
+#### Constructor
+```php
+new FluxClient(string $apiKey, array $options = [])
+```
+
+**Parameters:**
+- `$apiKey` (string) - Your Black Forest Labs API key
+- `$options` (array) - Optional Guzzle HTTP client configuration
+
+#### Service Access Methods
+- [`imageGeneration()`](#imagegeneration-service) - Access image generation services
+- [`finetune()`](#finetune-service) - Access fine-tuning services
+- [`utility()`](#utility-service) - Access utility services
+
+---
+
+### ImageGeneration Service
+
+Access via `$client->imageGeneration()`. Handles all image generation operations.
+
+#### Core Generation Methods
+
+##### `flux1Pro(Flux1ProRequest $request): ImageGenerationResponse`
+Generate images with FLUX1 Pro model - highest quality, balanced performance.
+
+**Endpoint:** `POST /flux-pro`
+
+**Parameters:** Use [`ImageRequestBuilder`](#imagerequestbuilder) to construct the request object.
+
+**Example:**
+```php
+$request = ImageRequestBuilder::create()
+    ->withPrompt('A majestic dragon')
+    ->withDimensions(1024, 768)
+    ->buildFlux1Pro();
+    
+$response = $client->imageGeneration()->flux1Pro($request);
+```
+
+##### `flux1Dev(array $params): ImageGenerationResponse`
+Generate images with FLUX1 Dev model - development model, faster generation.
+
+**Endpoint:** `POST /flux-dev`
+
+**Parameters:**
+- `prompt` (string) - Text description of desired image
+- `width` (int, optional) - Image width (default: 1024)
+- `height` (int, optional) - Image height (default: 768)
+- `steps` (int, optional) - Denoising steps (default: 28)
+- `guidance` (float, optional) - Guidance scale (default: 2.5)
+- `seed` (int, optional) - Seed for reproducible results
+
+**Example:**
+```php
+$response = $client->imageGeneration()->flux1Dev([
+    'prompt' => 'A serene mountain landscape',
+    'width' => 512,
+    'height' => 512,
+    'steps' => 28
+]);
+```
+
+##### `flux11Pro(array $params): ImageGenerationResponse`
+Generate images with FLUX 1.1 Pro model - improved quality and performance.
+
+**Endpoint:** `POST /flux-pro-1.1`
+
+**Parameters:**
+- `prompt` (string) - Text description
+- `width` (int, optional) - Image width
+- `height` (int, optional) - Image height
+- `steps` (int, optional) - Denoising steps
+- `guidance` (float, optional) - Guidance scale
+- `seed` (int, optional) - Seed value
+
+##### `flux11ProUltra(array $params): ImageGenerationResponse`
+Generate images with FLUX 1.1 Pro Ultra model - highest quality available.
+
+**Endpoint:** `POST /flux-pro-1.1-ultra`
+
+**Parameters:**
+- `prompt` (string) - Text description
+- `aspect_ratio` (string, optional) - Aspect ratio (e.g., '1:1', '16:9')
+- `raw` (bool, optional) - Output raw format
+- `safety_tolerance` (int, optional) - Safety filtering level (0-6)
+
+**Example:**
+```php
+$response = $client->imageGeneration()->flux11ProUltra([
+    'prompt' => 'An abstract artistic composition',
+    'aspect_ratio' => '1:1',
+    'raw' => false
+]);
+```
+
+#### Contextual Generation Methods
+
+##### `fluxKontextPro(array $params): ImageGenerationResponse`
+Edit or create images with Flux Kontext Pro.
+
+**Endpoint:** `POST /flux-kontext-pro`
+
+##### `fluxKontextMax(array $params): ImageGenerationResponse`
+Edit or create images with Flux Kontext Max.
+
+**Endpoint:** `POST /flux-kontext-max`
+
+#### Image Editing Methods
+
+##### `flux1Fill(array $params): ImageGenerationResponse`
+Fill/inpaint specific areas of an image using FLUX1 Fill Pro.
+
+**Endpoint:** `POST /flux-pro-1.0-fill`
+
+**Required Parameters:**
+- `image` (string) - Base64 encoded input image
+- `prompt` (string) - Description for the fill area
+
+**Optional Parameters:**
+- `mask` (string) - Base64 encoded mask image
+- `width` (int) - Output width
+- `height` (int) - Output height
+
+**Example:**
+```php
+$response = $client->imageGeneration()->flux1Fill([
+    'image' => base64_encode(file_get_contents('input.jpg')),
+    'mask' => base64_encode(file_get_contents('mask.png')),
+    'prompt' => 'A beautiful garden'
+]);
+```
+
+##### `flux1Expand(array $params): ImageGenerationResponse`
+Expand an image by adding pixels on any side.
+
+**Endpoint:** `POST /flux-pro-1.0-expand`
+
+**Required Parameters:**
+- `image` (string) - Base64 encoded input image
+
+**Optional Parameters:**
+- `top` (int) - Pixels to add on top
+- `bottom` (int) - Pixels to add on bottom
+- `left` (int) - Pixels to add on left
+- `right` (int) - Pixels to add on right
+- `prompt` (string) - Description for expanded areas
+
+**Example:**
+```php
+$response = $client->imageGeneration()->flux1Expand([
+    'image' => base64_encode(file_get_contents('input.jpg')),
+    'top' => 100,
+    'bottom' => 100,
+    'prompt' => 'Expand with matching scenery'
+]);
+```
+
+#### Control Methods
+
+##### `flux1Canny(array $params): ImageGenerationResponse`
+Generate images using Canny edge detection as control guidance.
+
+**Endpoint:** `POST /flux-pro-1.0-canny`
+
+**Required Parameters:**
+- `prompt` (string) - Text description
+- `control_image` (string) - Base64 encoded control image
+
+**Optional Parameters:**
+- `canny_low_threshold` (int) - Low threshold for edge detection (default: 50)
+- `canny_high_threshold` (int) - High threshold for edge detection (default: 200)
+
+**Example:**
+```php
+$response = $client->imageGeneration()->flux1Canny([
+    'prompt' => 'A realistic portrait',
+    'control_image' => base64_encode(file_get_contents('edges.jpg')),
+    'canny_low_threshold' => 50,
+    'canny_high_threshold' => 200
+]);
+```
+
+##### `flux1Depth(array $params): ImageGenerationResponse`
+Generate images using depth information as control guidance.
+
+**Endpoint:** `POST /flux-pro-1.0-depth`
+
+**Required Parameters:**
+- `prompt` (string) - Text description
+- `control_image` (string) - Base64 encoded depth control image
+
+---
+
+### Finetune Service
+
+Access via `$client->finetune()`. Handles fine-tuning operations and fine-tuned model usage.
+
+#### Management Methods
+
+##### `create(array $params): array`
+Create a new fine-tuned model from training images.
+
+**Endpoint:** `POST /finetune`
+
+**Required Parameters:**
+- `file_data` (string) - Base64 encoded training data ZIP file
+- `finetune_comment` (string) - Description of the fine-tune
+- `mode` (string) - Training mode ('style', 'object', etc.)
+- `trigger_word` (string) - Trigger word for the model
+- `iterations` (int) - Number of training iterations
+
+**Example:**
+```php
+$response = $client->finetune()->create([
+    'file_data' => base64_encode(file_get_contents('training_data.zip')),
+    'finetune_comment' => 'My custom style',
+    'mode' => 'style',
+    'trigger_word' => 'MYSTYLE',
+    'iterations' => 500
+]);
+```
+
+##### `listMyFinetunes(): array`
+List all fine-tunes belonging to the authenticated user.
+
+**Endpoint:** `GET /my_finetunes`
+
+**Returns:** Array containing finetunes list
+
+**Example:**
+```php
+$finetunes = $client->finetune()->listMyFinetunes();
+print_r($finetunes['finetunes']);
+```
+
+##### `getDetails(string $finetuneId): array`
+Get detailed information about a specific fine-tune.
+
+**Endpoint:** `GET /finetune_details`
+
+**Parameters:**
+- `finetune_id` (string) - ID of the fine-tune
+
+##### `delete(string $finetuneId): array`
+Delete a previously created fine-tune.
+
+**Endpoint:** `POST /delete_finetune`
+
+**Parameters:**
+- `finetune_id` (string) - ID of the fine-tune to delete
+
+#### Generation Methods with Fine-tuned Models
+
+##### `generateWithFinetunedPro(array $params): ImageGenerationResponse`
+Generate images using a fine-tuned FLUX Pro model.
+
+**Endpoint:** `POST /flux-pro-finetuned`
+
+**Required Parameters:**
+- `finetune_id` (string) - ID of the fine-tuned model
+- `prompt` (string) - Text description (should include trigger word)
+
+**Optional Parameters:**
+- `finetune_strength` (float) - Strength of fine-tuning effect (default: 1.0)
+- `width`, `height`, `steps`, `guidance`, etc. - Standard generation parameters
+
+**Example:**
+```php
+$response = $client->finetune()->generateWithFinetunedPro([
+    'finetune_id' => 'your-finetune-id',
+    'prompt' => 'MYSTYLE a beautiful landscape',
+    'finetune_strength' => 1.2
+]);
+```
+
+##### `generateWithFinetunedUltra(array $params): ImageGenerationResponse`
+Generate images using a fine-tuned FLUX 1.1 Pro Ultra model.
+
+**Endpoint:** `POST /flux-pro-1.1-ultra-finetune`
+
+**Required Parameters:**
+- `finetune_id` (string) - ID of the fine-tuned model
+- `prompt` (string) - Text description
+
+##### `generateWithFinetunedDepth(array $params): ImageGenerationResponse`
+Generate images using fine-tuned FLUX1 Depth Pro with control guidance.
+
+**Endpoint:** `POST /flux-pro-1.0-depth-finetune`
+
+**Required Parameters:**
+- `finetune_id` (string) - ID of the fine-tuned model
+- `prompt` (string) - Text description
+- `control_image` (string) - Base64 encoded depth control image
+
+##### `generateWithFinetunedCanny(array $params): ImageGenerationResponse`
+Generate images using fine-tuned FLUX1 Canny Pro with edge control.
+
+**Endpoint:** `POST /flux-pro-1.0-canny-finetune`
+
+**Required Parameters:**
+- `finetune_id` (string) - ID of the fine-tuned model
+- `prompt` (string) - Text description
+- `control_image` (string) - Base64 encoded edge control image
+
+##### `generateWithFinetunedFill(array $params): ImageGenerationResponse`
+Generate images using fine-tuned FLUX1 Fill Pro for inpainting.
+
+**Endpoint:** `POST /flux-pro-1.0-fill-finetune`
+
+**Required Parameters:**
+- `finetune_id` (string) - ID of the fine-tuned model
+- `image` (string) - Base64 encoded input image
+
+**Optional Parameters:**
+- `mask` (string) - Base64 encoded mask image
+
+---
+
+### Utility Service
+
+Access via `$client->utility()`. Handles task status checking and result polling.
+
+##### `getResult(string $taskId): GetResultResponse`
+Retrieve the current status or final result for a task.
+
+**Endpoint:** `GET /get_result`
+
+**Parameters:**
+- `id` (string) - Task identifier from generation request
+
+**Returns:** [`GetResultResponse`](#getresultresponse) object
+
+**Example:**
+```php
+$result = $client->utility()->getResult('task-id-12345');
+
+if ($result->isSuccessful()) {
+    $imageUrl = $result->getResultAsString();
+}
+```
+
+##### `pollResult(string $taskId, int $maxAttempts = 60, int $delaySeconds = 5): GetResultResponse`
+Poll for task completion with automatic retries.
+
+**Parameters:**
+- `taskId` (string) - Task identifier
+- `maxAttempts` (int) - Maximum polling attempts (default: 60)
+- `delaySeconds` (int) - Delay between attempts in seconds (default: 5)
+
+**Example:**
+```php
+$result = $client->utility()->pollResult('task-id', 100, 3);
+```
+
+##### `waitForCompletion(string $taskId): GetResultResponse`
+Wait for task completion with sensible defaults (120 attempts, 3 second delay).
+
+**Parameters:**
+- `taskId` (string) - Task identifier
+
+**Example:**
+```php
+$result = $client->utility()->waitForCompletion('task-id');
+```
+
+##### `isTaskComplete(string $taskId): bool`
+Check if a task is complete without polling.
+
+**Returns:** Boolean indicating completion status
+
+##### `getProgress(string $taskId): ?float`
+Get task progress percentage if available.
+
+**Returns:** Progress as float (0.0-100.0) or null if not available
+
+---
+
+### ImageRequestBuilder
+
+Fluent builder for constructing complex image generation requests.
+
+#### Factory Method
+
+##### `create(): ImageRequestBuilder`
+Create a new builder instance.
+
+**Example:**
+```php
+$builder = ImageRequestBuilder::create();
+```
+
+#### Configuration Methods
+
+##### `withPrompt(string $prompt): ImageRequestBuilder`
+Set the text prompt for image generation.
+
+##### `withImagePrompt(string $imagePrompt): ImageRequestBuilder`
+Set an optional image prompt (base64 encoded).
+
+##### `withDimensions(int $width, int $height): ImageRequestBuilder`
+Set exact pixel dimensions for the output image.
+
+**Example:**
+```php
+$builder->withDimensions(1024, 768);
+```
+
+##### `withAspectRatio(string $ratio, int $baseSize = 1024): ImageRequestBuilder`
+Set dimensions using aspect ratio with automatic calculation.
+
+**Parameters:**
+- `ratio` (string) - Aspect ratio like '16:9', '4:3', '1:1'
+- `baseSize` (int) - Base dimension for calculation (default: 1024)
+
+**Example:**
+```php
+$builder->withAspectRatio('16:9', 1024); // Results in 1024x576
+```
+
+##### `withSteps(int $steps): ImageRequestBuilder`
+Set the number of denoising steps (more steps = higher quality, slower).
+
+##### `withPromptUpsampling(bool $enabled = true): ImageRequestBuilder`
+Enable or disable prompt upsampling for enhanced prompt processing.
+
+##### `withSeed(int $seed): ImageRequestBuilder`
+Set a specific seed for reproducible results.
+
+##### `withRandomSeed(): ImageRequestBuilder`
+Generate and set a random seed for varied results.
+
+##### `withGuidance(float $guidance): ImageRequestBuilder`
+Set classifier guidance scale (how closely to follow the prompt).
+
+**Typical values:** 1.0-10.0 (default: 2.5)
+
+##### `withInterval(float $interval): ImageRequestBuilder`
+Set interval for progressive updates.
+
+##### `withSafetyTolerance(int $tolerance): ImageRequestBuilder`
+Set safety filtering level.
+
+**Values:**
+- `0` - Strictest filtering
+- `2` - Balanced (default)
+- `6` - Most lenient
+
+##### `withOutputFormat(OutputFormat $format): ImageRequestBuilder`
+Set output format using enum.
+
+##### `asJpeg(): ImageRequestBuilder`
+Set output format to JPEG (shorthand method).
+
+##### `asPng(): ImageRequestBuilder`
+Set output format to PNG (shorthand method).
+
+##### `withWebhook(string $url, ?string $secret = null): ImageRequestBuilder`
+Configure webhook for result delivery.
+
+**Parameters:**
+- `url` (string) - Webhook URL
+- `secret` (string, optional) - Secret for webhook verification
+
+#### Build Methods
+
+##### `buildFlux1Pro(): Flux1ProRequest`
+Build a typed request object for FLUX1 Pro generation.
+
+##### `buildArray(): array`
+Build a generic parameter array for other model types.
+
+**Example:**
+```php
+$request = ImageRequestBuilder::create()
+    ->withPrompt('A magical forest')
+    ->withAspectRatio('4:3', 1024)
+    ->withSteps(50)
+    ->withGuidance(3.5)
+    ->withRandomSeed()
+    ->asPng()
+    ->buildFlux1Pro();
+```
+
+---
+
+### Response Objects
+
+#### ImageGenerationResponse
+
+Returned by all image generation methods.
+
+**Properties:**
+- `id` (string) - Task identifier for polling
+
+**Methods:**
+- Access task ID for polling: `$response->id`
+
+#### GetResultResponse
+
+Returned by utility methods for task results.
+
+**Properties:**
+- `id` (string) - Task identifier
+- `status` (ResultStatus) - Current task status
+- `result` (mixed) - Task result when complete
+
+**Status Methods:**
+- `isComplete(): bool` - Check if task is finished
+- `isSuccessful(): bool` - Check if task completed successfully
+- `isFailed(): bool` - Check if task failed
+- `isInProgress(): bool` - Check if task is still processing
+
+**Result Methods:**
+- `getResultAsString(): ?string` - Get result as string (typically image URL)
+- `getResultAsArray(): ?array` - Get result as array
+- `getProgressPercentage(): ?float` - Get progress percentage if available
+
+**Example:**
+```php
+$result = $client->utility()->getResult('task-id');
+
+if ($result->isSuccessful()) {
+    echo "Image URL: " . $result->getResultAsString();
+} elseif ($result->isFailed()) {
+    echo "Task failed: " . $result->status->value;
+} elseif ($result->isInProgress()) {
+    $progress = $result->getProgressPercentage();
+    echo "Progress: {$progress}%";
+}
+```
 
 ## Requirements
 
