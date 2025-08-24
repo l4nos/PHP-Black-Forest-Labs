@@ -1,0 +1,66 @@
+{
+    "name": "lanos/php-bfl",
+    "description": "PHP SDK for Black Forest Labs' FLUX API - Professional image generation toolkit",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "black-forest-labs",
+        "flux",
+        "ai",
+        "image-generation",
+        "api",
+        "sdk",
+        "php"
+    ],
+    "homepage": "https://github.com/l4nos/php-bfl",
+    "authors": [
+        {
+            "name": "Lanos",
+            "homepage": "https://github.com/l4nos"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "guzzlehttp/guzzle": "^7.0",
+        "psr/http-message": "^1.0 || ^2.0",
+        "psr/http-client": "^1.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^3.7",
+        "friendsofphp/php-cs-fixer": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lanos\\PHPBFL\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lanos\\PHPBFL\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html coverage",
+        "phpstan": "phpstan analyse src --level=max",
+        "cs-fix": "php-cs-fixer fix",
+        "cs-check": "php-cs-fixer fix --dry-run --diff"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    }
+}
