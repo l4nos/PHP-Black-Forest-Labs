@@ -4,9 +4,9 @@ A professional PHP SDK for [Black Forest Labs' FLUX API](https://api.bfl.ai/), p
 
 [![Latest Version](https://img.shields.io/packagist/v/lanos/php-bfl.svg?style=flat-square)](https://packagist.org/packages/lanos/php-bfl)
 [![PHP Version](https://img.shields.io/packagist/php-v/lanos/php-bfl.svg?style=flat-square)](https://packagist.org/packages/lanos/php-bfl)
-[![License](https://img.shields.io/packagist/l/lanos/php-bfl.svg?style=flat-square)](https://github.com/lanos/PHP-Black-Forest-Labs/blob/main/LICENSE.md)
-[![Tests](https://github.com/lanos/PHP-Black-Forest-Labs/workflows/Tests/badge.svg?branch=main)](https://github.com/lanos/PHP-Black-Forest-Labs/actions)
-[![Coverage](https://codecov.io/gh/lanos/PHP-Black-Forest-Labs/branch/main/graph/badge.svg)](https://codecov.io/gh/lanos/PHP-Black-Forest-Labs)
+[![License](https://img.shields.io/packagist/l/lanos/php-bfl.svg?style=flat-square)](https://github.com/l4nos/PHP-Black-Forest-Labs/blob/main/LICENSE.md)
+[![Tests](https://github.com/l4nos/PHP-Black-Forest-Labs/actions/workflows/tests.yml/badge.svg)](https://github.com/l4nos/PHP-Black-Forest-Labs/actions)
+[![Coverage Status](https://coveralls.io/repos/github/l4nos/PHP-Black-Forest-Labs/badge.svg?branch=main)](https://coveralls.io/github/l4nos/PHP-Black-Forest-Labs?branch=main)
 
 ## Features
 
@@ -418,7 +418,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - [Documentation](docs/)
-- [Issues](https://github.com/lanos/PHP-Black-Forest-Labs/issues)
+- [Issues](https://github.com/l4nos/PHP-Black-Forest-Labs/issues)
 - [Black Forest Labs API Docs](https://docs.bfl.ai/)
 
 ## Disclaimer
@@ -427,4 +427,4 @@ This is an unofficial SDK for Black Forest Labs' FLUX API. It is not affiliated 
 
 ---
 
-Made with ❤️ by [Lanos](https://github.com/lanos)
+Made with ❤️ by [l4nos](https://github.com/l4nos)

@@ -71,13 +71,14 @@ jobs:
         vendor/bin/phpunit --configuration phpunit.legacy.xml --coverage-clover coverage.xml
         vendor/bin/phpunit --configuration phpunit.legacy.xml --coverage-html coverage
 
-    - name: Upload coverage reports to Codecov
-      if: matrix.php-version == '8.3' && matrix.dependency-version == 'prefer-stable'
-      uses: codecov/codecov-action@v3
+    - name: Upload coverage to Coveralls
+      if: matrix.php-version == '8.3'
+      uses: coverallsapp/github-action@v2
       with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        file: coverage.xml
+        flag-name: php-${{ matrix.php-version }}-${{ matrix.dependency-version }}
+        parallel: true
 
   code-quality:
     runs-on: ubuntu-latest
@@ -137,3 +138,17 @@ jobs:
 
     - name: Check for known security vulnerabilities
       uses: symfonycorp/security-checker-action@v5
+
+  coverage-finish:
+    needs: test
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Coveralls Finished
+    
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
+        carryforward: "php-8.1-prefer-lowest,php-8.1-prefer-stable,php-8.2-prefer-lowest,php-8.2-prefer-stable,php-8.3-prefer-lowest,php-8.3-prefer-stable"
