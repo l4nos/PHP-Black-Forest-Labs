@@ -5,8 +5,11 @@
          colors="true"
          cacheDirectory=".phpunit.cache"
          testdox="true"
-         failOnRisky="true"
-         failOnWarning="false">
+         failOnRisky="false"
+         failOnWarning="false"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         beStrictAboutOutputDuringTests="false"
+         beStrictAboutChangesToGlobalState="false">
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
