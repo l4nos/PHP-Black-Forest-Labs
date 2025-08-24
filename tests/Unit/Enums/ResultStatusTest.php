@@ -15,13 +15,13 @@ class ResultStatusTest extends TestCase
     public function test_enum_cases_exist(): void
     {
         $this->assertTrue(enum_exists(ResultStatus::class));
-        
+
         $cases = ResultStatus::cases();
         $this->assertCount(6, $cases);
-        
-        $caseNames = array_map(fn($case) => $case->name, $cases);
+
+        $caseNames = array_map(fn ($case) => $case->name, $cases);
         $expectedCases = ['TASK_NOT_FOUND', 'PENDING', 'REQUEST_MODERATED', 'CONTENT_MODERATED', 'READY', 'ERROR'];
-        
+
         $this->assertSame($expectedCases, $caseNames);
     }
 
@@ -107,7 +107,7 @@ class ResultStatusTest extends TestCase
     {
         // Only READY should return true
         $this->assertTrue(ResultStatus::READY->isSuccessful());
-        
+
         // All other states should return false
         $this->assertFalse(ResultStatus::TASK_NOT_FOUND->isSuccessful());
         $this->assertFalse(ResultStatus::PENDING->isSuccessful());
@@ -139,17 +139,17 @@ class ResultStatusTest extends TestCase
             if ($status->isSuccessful()) {
                 $this->assertFalse($status->isFailed(), "Status {$status->name} cannot be both successful and failed");
             }
-            
+
             // A status cannot be both in progress and complete
             if ($status->isInProgress()) {
                 $this->assertFalse($status->isComplete(), "Status {$status->name} cannot be both in progress and complete");
             }
-            
+
             // A successful status must be complete
             if ($status->isSuccessful()) {
                 $this->assertTrue($status->isComplete(), "Status {$status->name} must be complete if successful");
             }
-            
+
             // A failed status must be complete
             if ($status->isFailed()) {
                 $this->assertTrue($status->isComplete(), "Status {$status->name} must be complete if failed");
@@ -160,7 +160,7 @@ class ResultStatusTest extends TestCase
     public function test_each_status_has_unique_behavior(): void
     {
         $behaviors = [];
-        
+
         foreach (ResultStatus::cases() as $status) {
             $behavior = [
                 'complete' => $status->isComplete(),
@@ -168,16 +168,16 @@ class ResultStatusTest extends TestCase
                 'successful' => $status->isSuccessful(),
                 'in_progress' => $status->isInProgress(),
             ];
-            
+
             $behaviorKey = json_encode($behavior);
-            
+
             if (!isset($behaviors[$behaviorKey])) {
                 $behaviors[$behaviorKey] = [];
             }
-            
+
             $behaviors[$behaviorKey][] = $status->name;
         }
-        
+
         // Check that we have meaningful behavior distinctions
         $this->assertGreaterThan(1, count($behaviors), 'Status behaviors should be diverse');
     }
@@ -213,7 +213,7 @@ class ResultStatusTest extends TestCase
     public function test_enum_is_instance_of_correct_type(): void
     {
         $status = ResultStatus::READY;
-        
+
         $this->assertInstanceOf(ResultStatus::class, $status);
         $this->assertInstanceOf(\UnitEnum::class, $status);
         $this->assertInstanceOf(\BackedEnum::class, $status);
@@ -224,7 +224,7 @@ class ResultStatusTest extends TestCase
         $status1 = ResultStatus::READY;
         $status2 = ResultStatus::READY;
         $status3 = ResultStatus::ERROR;
-        
+
         $this->assertSame($status1, $status2);
         $this->assertTrue($status1 === $status2);
         $this->assertNotSame($status1, $status3);
@@ -234,10 +234,10 @@ class ResultStatusTest extends TestCase
     public function test_enum_serialization(): void
     {
         $status = ResultStatus::READY;
-        
+
         // Test that we can serialize and get the string value
         $this->assertSame('Ready', (string) $status->value);
-        
+
         // Test JSON serialization
         $json = json_encode($status);
         $this->assertSame('"Ready"', $json);
@@ -246,7 +246,7 @@ class ResultStatusTest extends TestCase
     public function test_enum_in_array_operations(): void
     {
         $statuses = [ResultStatus::READY, ResultStatus::ERROR];
-        
+
         $this->assertTrue(in_array(ResultStatus::READY, $statuses, true));
         $this->assertTrue(in_array(ResultStatus::ERROR, $statuses, true));
         $this->assertFalse(in_array(ResultStatus::PENDING, $statuses, true));
@@ -263,7 +263,7 @@ class ResultStatusTest extends TestCase
                 ResultStatus::READY => 'ready',
                 ResultStatus::ERROR => 'error',
             };
-            
+
             $this->assertIsString($result);
             $this->assertNotEmpty($result);
         }
@@ -291,12 +291,12 @@ class ResultStatusTest extends TestCase
     {
         foreach (ResultStatus::cases() as $status) {
             $value = $status->value;
-            
+
             // Values should be human-readable strings
             $this->assertIsString($value);
             $this->assertNotEmpty($value);
             $this->assertGreaterThan(3, strlen($value));
-            
+
             // Should contain at least one letter (not just symbols/numbers)
             $this->assertMatchesRegularExpression('/[a-zA-Z]/', $value);
         }
@@ -307,20 +307,20 @@ class ResultStatusTest extends TestCase
         // Test that statuses are logically grouped
         $completeStatuses = array_filter(
             ResultStatus::cases(),
-            fn($status) => $status->isComplete()
+            fn ($status) => $status->isComplete()
         );
-        
+
         $inProgressStatuses = array_filter(
             ResultStatus::cases(),
-            fn($status) => $status->isInProgress()
+            fn ($status) => $status->isInProgress()
         );
-        
+
         // All statuses should be either complete or in progress, but not both
         $this->assertCount(6, $completeStatuses + $inProgressStatuses);
-        
+
         // No overlap between complete and in-progress
-        $completeNames = array_map(fn($s) => $s->name, $completeStatuses);
-        $inProgressNames = array_map(fn($s) => $s->name, $inProgressStatuses);
+        $completeNames = array_map(fn ($s) => $s->name, $completeStatuses);
+        $inProgressNames = array_map(fn ($s) => $s->name, $inProgressStatuses);
         $this->assertEmpty(array_intersect($completeNames, $inProgressNames));
     }
 }

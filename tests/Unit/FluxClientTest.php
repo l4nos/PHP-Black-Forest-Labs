@@ -176,7 +176,7 @@ class FluxClientTest extends TestCase
         $httpClient = $client->getHttpClient();
 
         $config = $httpClient->getConfig();
-        
+
         $this->assertSame('https://api.bfl.ai/v1', $config['base_uri']->__toString());
         $this->assertSame(30, $config['timeout']);
         $this->assertSame('application/json', $config['headers']['Content-Type']);

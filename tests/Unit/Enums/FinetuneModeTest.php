@@ -15,13 +15,13 @@ class FinetuneModeTest extends TestCase
     public function test_enum_cases_exist(): void
     {
         $this->assertTrue(enum_exists(FinetuneMode::class));
-        
+
         $cases = FinetuneMode::cases();
         $this->assertCount(4, $cases);
-        
-        $caseNames = array_map(fn($case) => $case->name, $cases);
+
+        $caseNames = array_map(fn ($case) => $case->name, $cases);
         $expectedCases = ['GENERAL', 'CHARACTER', 'STYLE', 'PRODUCT'];
-        
+
         $this->assertSame($expectedCases, $caseNames);
     }
 
@@ -67,7 +67,7 @@ class FinetuneModeTest extends TestCase
     {
         $mode = FinetuneMode::GENERAL;
         $description = $mode->getDescription();
-        
+
         $this->assertSame('General purpose fine-tuning for diverse content', $description);
     }
 
@@ -75,7 +75,7 @@ class FinetuneModeTest extends TestCase
     {
         $mode = FinetuneMode::CHARACTER;
         $description = $mode->getDescription();
-        
+
         $this->assertSame('Optimized for character-based training', $description);
     }
 
@@ -83,7 +83,7 @@ class FinetuneModeTest extends TestCase
     {
         $mode = FinetuneMode::STYLE;
         $description = $mode->getDescription();
-        
+
         $this->assertSame('Optimized for artistic style transfer', $description);
     }
 
@@ -91,7 +91,7 @@ class FinetuneModeTest extends TestCase
     {
         $mode = FinetuneMode::PRODUCT;
         $description = $mode->getDescription();
-        
+
         $this->assertSame('Optimized for product photography and commercial use', $description);
     }
 
@@ -108,21 +108,24 @@ class FinetuneModeTest extends TestCase
     public function test_descriptions_are_unique(): void
     {
         $descriptions = [];
-        
+
         foreach (FinetuneMode::cases() as $mode) {
             $description = $mode->getDescription();
-            $this->assertNotContains($description, $descriptions, 
-                "Description for {$mode->name} is not unique: {$description}");
+            $this->assertNotContains(
+                $description,
+                $descriptions,
+                "Description for {$mode->name} is not unique: {$description}"
+            );
             $descriptions[] = $description;
         }
-        
+
         $this->assertCount(4, array_unique($descriptions));
     }
 
     public function test_enum_is_instance_of_correct_type(): void
     {
         $mode = FinetuneMode::GENERAL;
-        
+
         $this->assertInstanceOf(FinetuneMode::class, $mode);
         $this->assertInstanceOf(\UnitEnum::class, $mode);
         $this->assertInstanceOf(\BackedEnum::class, $mode);
@@ -133,7 +136,7 @@ class FinetuneModeTest extends TestCase
         $mode1 = FinetuneMode::GENERAL;
         $mode2 = FinetuneMode::GENERAL;
         $mode3 = FinetuneMode::CHARACTER;
-        
+
         $this->assertSame($mode1, $mode2);
         $this->assertTrue($mode1 === $mode2);
         $this->assertNotSame($mode1, $mode3);
@@ -143,10 +146,10 @@ class FinetuneModeTest extends TestCase
     public function test_enum_serialization(): void
     {
         $mode = FinetuneMode::STYLE;
-        
+
         // Test that we can serialize and get the string value
         $this->assertSame('style', (string) $mode->value);
-        
+
         // Test JSON serialization
         $json = json_encode($mode);
         $this->assertSame('"style"', $json);
@@ -155,7 +158,7 @@ class FinetuneModeTest extends TestCase
     public function test_enum_in_array_operations(): void
     {
         $modes = [FinetuneMode::GENERAL, FinetuneMode::STYLE];
-        
+
         $this->assertTrue(in_array(FinetuneMode::GENERAL, $modes, true));
         $this->assertTrue(in_array(FinetuneMode::STYLE, $modes, true));
         $this->assertFalse(in_array(FinetuneMode::CHARACTER, $modes, true));
@@ -171,7 +174,7 @@ class FinetuneModeTest extends TestCase
                 FinetuneMode::STYLE => 'style_result',
                 FinetuneMode::PRODUCT => 'product_result',
             };
-            
+
             $this->assertIsString($result);
             $this->assertStringEndsWith('_result', $result);
         }
