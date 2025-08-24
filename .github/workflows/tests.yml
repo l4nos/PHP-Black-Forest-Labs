@@ -51,14 +51,25 @@ jobs:
       if: matrix.dependency-version == 'prefer-stable'
       run: composer update --prefer-stable --prefer-dist --no-progress
 
-    - name: Run test suite
+    - name: Run test suite (prefer-lowest)
+      if: matrix.dependency-version == 'prefer-lowest'
+      run: vendor/bin/phpunit --configuration phpunit.legacy.xml
+
+    - name: Run test suite (prefer-stable)
+      if: matrix.dependency-version == 'prefer-stable'
       run: composer test
 
-    - name: Generate coverage report
+    - name: Generate coverage report (prefer-stable)
       if: matrix.php-version == '8.3' && matrix.dependency-version == 'prefer-stable'
       run: |
-        vendor/bin/phpunit --coverage-clover coverage.xml
-        vendor/bin/phpunit --coverage-html coverage
+        vendor/bin/phpunit --configuration phpunit.xml --coverage-clover coverage.xml
+        vendor/bin/phpunit --configuration phpunit.xml --coverage-html coverage
+
+    - name: Generate coverage report (prefer-lowest)
+      if: matrix.php-version == '8.3' && matrix.dependency-version == 'prefer-lowest'
+      run: |
+        vendor/bin/phpunit --configuration phpunit.legacy.xml --coverage-clover coverage.xml
+        vendor/bin/phpunit --configuration phpunit.legacy.xml --coverage-html coverage
 
     - name: Upload coverage reports to Codecov
       if: matrix.php-version == '8.3' && matrix.dependency-version == 'prefer-stable'
