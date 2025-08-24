@@ -6,7 +6,7 @@ A professional PHP SDK for [Black Forest Labs' FLUX API](https://api.bfl.ai/), p
 [![PHP Version](https://img.shields.io/packagist/php-v/lanos/php-bfl.svg?style=flat-square)](https://packagist.org/packages/lanos/php-bfl)
 [![License](https://img.shields.io/packagist/l/lanos/php-bfl.svg?style=flat-square)](https://github.com/l4nos/PHP-Black-Forest-Labs/blob/main/LICENSE.md)
 [![Tests](https://github.com/l4nos/PHP-Black-Forest-Labs/actions/workflows/tests.yml/badge.svg)](https://github.com/l4nos/PHP-Black-Forest-Labs/actions)
-[![Coverage Status](https://coveralls.io/repos/github/l4nos/PHP-Black-Forest-Labs/badge.svg?branch=main)](https://coveralls.io/github/l4nos/PHP-Black-Forest-Labs?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/l4nos/PHP-Black-Forest-Labs/badge.svg)](https://coveralls.io/github/l4nos/PHP-Black-Forest-Labs)
 
 ## Features
 
