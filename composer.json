@@ -58,7 +58,7 @@
         "phpstan": "phpstan analyse src --level=max",
         "cs-fix": "php-cs-fixer fix",
         "cs-check": "php-cs-fixer fix --dry-run --diff",
-        "audit": "composer audit --no-dev",
+        "security-audit": "composer audit --no-dev",
         "check-all": [
             "@test",
             "@phpstan",

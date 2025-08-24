@@ -5,10 +5,8 @@ parameters:
     excludePaths:
         - tests
     ignoreErrors:
-        # Allow mixed types for API responses
-        - '#Method .* return type has no value type specified in iterable type array#'
-        # Allow dynamic properties for flexibility
-        - '#Access to an undefined property#'
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics
     reportUnmatchedIgnoredErrors: false

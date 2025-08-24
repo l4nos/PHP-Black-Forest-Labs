@@ -53,19 +53,19 @@ class Flux1ProRequest
     public static function fromArray(array $data): self
     {
         return new self(
-            prompt: $data['prompt'] ?? null,
-            imagePrompt: $data['image_prompt'] ?? null,
-            width: (int) ($data['width'] ?? 1024),
-            height: (int) ($data['height'] ?? 768),
-            steps: (int) ($data['steps'] ?? 40),
+            prompt: isset($data['prompt']) && is_string($data['prompt']) ? $data['prompt'] : null,
+            imagePrompt: isset($data['image_prompt']) && is_string($data['image_prompt']) ? $data['image_prompt'] : null,
+            width: isset($data['width']) && is_numeric($data['width']) ? (int) $data['width'] : 1024,
+            height: isset($data['height']) && is_numeric($data['height']) ? (int) $data['height'] : 768,
+            steps: isset($data['steps']) && is_numeric($data['steps']) ? (int) $data['steps'] : 40,
             promptUpsampling: (bool) ($data['prompt_upsampling'] ?? false),
-            seed: isset($data['seed']) ? (int) $data['seed'] : null,
-            guidance: (float) ($data['guidance'] ?? 2.5),
-            interval: (float) ($data['interval'] ?? 2.0),
-            safetyTolerance: (int) ($data['safety_tolerance'] ?? 2),
-            outputFormat: isset($data['output_format']) ? OutputFormat::from($data['output_format']) : OutputFormat::JPEG,
-            webhookUrl: $data['webhook_url'] ?? null,
-            webhookSecret: $data['webhook_secret'] ?? null,
+            seed: isset($data['seed']) && is_numeric($data['seed']) ? (int) $data['seed'] : null,
+            guidance: isset($data['guidance']) && is_numeric($data['guidance']) ? (float) $data['guidance'] : 2.5,
+            interval: isset($data['interval']) && is_numeric($data['interval']) ? (float) $data['interval'] : 2.0,
+            safetyTolerance: isset($data['safety_tolerance']) && is_numeric($data['safety_tolerance']) ? (int) $data['safety_tolerance'] : 2,
+            outputFormat: isset($data['output_format']) && is_string($data['output_format']) ? OutputFormat::from($data['output_format']) : OutputFormat::JPEG,
+            webhookUrl: isset($data['webhook_url']) && is_string($data['webhook_url']) ? $data['webhook_url'] : null,
+            webhookSecret: isset($data['webhook_secret']) && is_string($data['webhook_secret']) ? $data['webhook_secret'] : null,
         );
     }
 

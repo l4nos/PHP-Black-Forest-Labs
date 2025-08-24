@@ -78,10 +78,12 @@ class ImageRequestBuilder
         // Calculate dimensions that maintain aspect ratio and are multiples of 32
         if ($widthRatio >= $heightRatio) {
             $this->width = $baseSize;
-            $this->height = (int) round(($baseSize * $heightRatio) / $widthRatio / 32) * 32;
+            $calculatedHeight = ($baseSize * $heightRatio) / $widthRatio;
+            $this->height = (int) (round($calculatedHeight / 32) * 32);
         } else {
             $this->height = $baseSize;
-            $this->width = (int) round(($baseSize * $widthRatio) / $heightRatio / 32) * 32;
+            $calculatedWidth = ($baseSize * $widthRatio) / $heightRatio;
+            $this->width = (int) (round($calculatedWidth / 32) * 32);
         }
         
         return $this;

@@ -57,7 +57,7 @@ class FluxApiException extends Exception
             500 => 'Internal server error - please try again later',
             502 => 'Bad gateway - service temporarily unavailable',
             503 => 'Service unavailable - please try again later',
-            default => $this->message ?: 'An unknown error occurred'
+            default => 'An unknown error occurred'
         };
     }
 }

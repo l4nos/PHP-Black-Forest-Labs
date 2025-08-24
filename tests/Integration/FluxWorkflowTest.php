@@ -243,7 +243,7 @@ class FluxWorkflowTest extends TestCase
         foreach ($submittedTasks as $index => $task) {
             $result = $client->utility()->getResult($task->id);
             $this->assertTrue($result->isSuccessful());
-            $this->assertStringContains("image" . ($index + 1), $result->getResultAsString());
+            $this->assertStringContainsString("image" . ($index + 1), (string) $result->getResultAsString());
         }
     }
 }

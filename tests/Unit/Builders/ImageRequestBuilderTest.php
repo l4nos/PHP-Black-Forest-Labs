@@ -82,7 +82,7 @@ class ImageRequestBuilderTest extends TestCase
         $request = $builder->buildFlux1Pro();
         
         $this->assertSame(768, $request->height);
-        $this->assertSame(432, $request->width); // 768 * 9/16 rounded to nearest 32
+        $this->assertSame(448, $request->width); // 768 * 9/16 = 432, rounded to nearest 32 = 448
     }
 
     public function test_can_set_steps(): void

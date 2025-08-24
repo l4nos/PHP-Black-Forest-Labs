@@ -122,7 +122,7 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Run security audit
-      run: composer audit
+      run: composer security-audit
 
     - name: Check for known security vulnerabilities
       uses: symfonycorp/security-checker-action@v5

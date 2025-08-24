@@ -29,8 +29,8 @@ class ImageGenerationResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data['id'] ?? '',
-            pollingUrl: $data['polling_url'] ?? '',
+            id: isset($data['id']) && is_string($data['id']) ? $data['id'] : '',
+            pollingUrl: isset($data['polling_url']) && is_string($data['polling_url']) ? $data['polling_url'] : '',
         );
     }
 

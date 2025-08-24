@@ -39,12 +39,12 @@ class GetResultResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data['id'] ?? '',
-            status: ResultStatus::from($data['status'] ?? ''),
+            id: isset($data['id']) && is_string($data['id']) ? $data['id'] : '',
+            status: ResultStatus::from(isset($data['status']) && is_string($data['status']) ? $data['status'] : ''),
             result: $data['result'] ?? null,
-            progress: isset($data['progress']) ? (float) $data['progress'] : null,
-            details: $data['details'] ?? null,
-            preview: $data['preview'] ?? null,
+            progress: isset($data['progress']) && is_numeric($data['progress']) ? (float) $data['progress'] : null,
+            details: isset($data['details']) && is_array($data['details']) ? $data['details'] : null,
+            preview: isset($data['preview']) && is_array($data['preview']) ? $data['preview'] : null,
         );
     }
 

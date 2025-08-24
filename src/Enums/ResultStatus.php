@@ -25,7 +25,7 @@ enum ResultStatus: string
     public function isComplete(): bool
     {
         return match ($this) {
-            self::READY, self::ERROR, self::CONTENT_MODERATED => true,
+            self::READY, self::ERROR, self::CONTENT_MODERATED, self::TASK_NOT_FOUND => true,
             default => false,
         };
     }

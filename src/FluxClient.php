@@ -7,6 +7,7 @@ namespace Lanos\PHPBFL;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Lanos\PHPBFL\Exceptions\FluxApiException;
 use Lanos\PHPBFL\Exceptions\AuthenticationException;
 use Lanos\PHPBFL\Services\ImageGenerationService;
@@ -25,7 +26,7 @@ final class FluxClient
 {
     private const BASE_URL = 'https://api.bfl.ai/v1';
     
-    private ClientInterface $httpClient;
+    private Client $httpClient;
     private string $apiKey;
     
     private ?ImageGenerationService $imageGeneration = null;
@@ -112,6 +113,17 @@ final class FluxClient
 
             return $this->handleResponse($response);
         } catch (GuzzleException $e) {
+            // Check if this is a 401 HTTP error
+            if ($e instanceof RequestException && $e->hasResponse()) {
+                $response = $e->getResponse();
+                if ($response !== null && $response->getStatusCode() === 401) {
+                    $body = $response->getBody()->getContents();
+                    $errorData = json_decode($body, true);
+                    $errorMessage = is_array($errorData) && isset($errorData['message']) ? (string)$errorData['message'] : 'Authentication failed';
+                    throw new AuthenticationException($errorMessage, 401);
+                }
+            }
+            
             throw new FluxApiException(
                 'GET request failed: ' . $e->getMessage(),
                 $e->getCode(),
@@ -137,6 +149,17 @@ final class FluxClient
 
             return $this->handleResponse($response);
         } catch (GuzzleException $e) {
+            // Check if this is a 401 HTTP error
+            if ($e instanceof RequestException && $e->hasResponse()) {
+                $response = $e->getResponse();
+                if ($response !== null && $response->getStatusCode() === 401) {
+                    $body = $response->getBody()->getContents();
+                    $errorData = json_decode($body, true);
+                    $errorMessage = is_array($errorData) && isset($errorData['message']) ? (string)$errorData['message'] : 'Authentication failed';
+                    throw new AuthenticationException($errorMessage, 401);
+                }
+            }
+            
             throw new FluxApiException(
                 'POST request failed: ' . $e->getMessage(),
                 $e->getCode(),
@@ -159,7 +182,7 @@ final class FluxClient
 
         if ($statusCode >= 400) {
             $errorData = json_decode($body, true);
-            $errorMessage = $errorData['message'] ?? 'Unknown API error';
+            $errorMessage = is_array($errorData) && isset($errorData['message']) ? (string)$errorData['message'] : 'Unknown API error';
             
             if ($statusCode === 401) {
                 throw new AuthenticationException($errorMessage, $statusCode);
@@ -168,13 +191,18 @@ final class FluxClient
             throw new FluxApiException($errorMessage, $statusCode);
         }
 
+        // Handle empty response body
+        if (empty($body)) {
+            return [];
+        }
+
         $decodedBody = json_decode($body, true);
         
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new FluxApiException('Invalid JSON response: ' . json_last_error_msg());
         }
 
-        return $decodedBody ?? [];
+        return is_array($decodedBody) ? $decodedBody : [];
     }
 
     /**
@@ -188,7 +216,7 @@ final class FluxClient
     /**
      * Get the HTTP client instance
      */
-    public function getHttpClient(): ClientInterface
+    public function getHttpClient(): Client
     {
         return $this->httpClient;
     }
