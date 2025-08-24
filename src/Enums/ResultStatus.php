@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\Enums;
 
 /**
- * Status enumeration for generation tasks
+ * Status enumeration for generation tasks.
  *
- * @package Lanos\PHPBFL\Enums
  * @author Lanos <https://github.com/l4nos>
  */
 enum ResultStatus: string
@@ -20,7 +19,7 @@ enum ResultStatus: string
     case ERROR = 'Error';
 
     /**
-     * Check if the status indicates the task is complete
+     * Check if the status indicates the task is complete.
      */
     public function isComplete(): bool
     {
@@ -31,7 +30,7 @@ enum ResultStatus: string
     }
 
     /**
-     * Check if the status indicates the task failed
+     * Check if the status indicates the task failed.
      */
     public function isFailed(): bool
     {
@@ -42,7 +41,7 @@ enum ResultStatus: string
     }
 
     /**
-     * Check if the status indicates the task is successful
+     * Check if the status indicates the task is successful.
      */
     public function isSuccessful(): bool
     {
@@ -50,7 +49,7 @@ enum ResultStatus: string
     }
 
     /**
-     * Check if the task is still in progress
+     * Check if the task is still in progress.
      */
     public function isInProgress(): bool
     {

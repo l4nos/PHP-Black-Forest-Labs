@@ -12,9 +12,7 @@ use Lanos\PHPBFL\FluxClient;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
- * Base test case with common utilities
- *
- * @package Lanos\PHPBFL\Tests
+ * Base test case with common utilities.
  */
 abstract class TestCase extends BaseTestCase
 {
@@ -25,7 +23,7 @@ abstract class TestCase extends BaseTestCase
         $mockHttpClient = new Client(['handler' => $handlerStack]);
 
         $client = new FluxClient('test-api-key');
-        
+
         // Use reflection to inject the mock HTTP client
         $reflection = new \ReflectionClass($client);
         $httpClientProperty = $reflection->getProperty('httpClient');
@@ -44,12 +42,12 @@ abstract class TestCase extends BaseTestCase
     {
         return new Response($status, ['Content-Type' => 'application/json'], json_encode([
             'error' => $message,
-            'message' => $message
+            'message' => $message,
         ]));
     }
 
     /**
-     * Assert that an array has the expected structure
+     * Assert that an array has the expected structure.
      *
      * @param array<string> $expectedKeys
      * @param array<string, mixed> $actual
@@ -62,7 +60,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Generate a sample task response
+     * Generate a sample task response.
      *
      * @return array<string, mixed>
      */
@@ -70,12 +68,12 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             'id' => 'task_' . uniqid(),
-            'polling_url' => 'https://api.bfl.ai/v1/get_result?id=task_' . uniqid()
+            'polling_url' => 'https://api.bfl.ai/v1/get_result?id=task_' . uniqid(),
         ];
     }
 
     /**
-     * Generate a sample result response
+     * Generate a sample result response.
      *
      * @return array<string, mixed>
      */
@@ -87,7 +85,7 @@ abstract class TestCase extends BaseTestCase
             'result' => $result ?? 'https://example.com/generated-image.jpg',
             'progress' => $status === 'Ready' ? 100.0 : 50.0,
             'details' => ['model' => 'flux-pro'],
-            'preview' => null
+            'preview' => null,
         ];
     }
 }

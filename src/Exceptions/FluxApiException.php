@@ -5,30 +5,28 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\Exceptions;
 
 use Exception;
-use Throwable;
 
 /**
- * Base exception for FLUX API errors
+ * Base exception for FLUX API errors.
  *
- * @package Lanos\PHPBFL\Exceptions
  * @author Lanos <https://github.com/l4nos>
  */
-class FluxApiException extends Exception
+class FluxApiException extends \Exception
 {
     /**
-     * Create a new FluxApiException instance
+     * Create a new FluxApiException instance.
      *
      * @param string $message The exception message
      * @param int $code The exception code (HTTP status code)
-     * @param Throwable|null $previous Previous exception for chaining
+     * @param \Throwable|null $previous Previous exception for chaining
      */
-    public function __construct(string $message = '', int $code = 0, ?Throwable $previous = null)
+    public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
 
     /**
-     * Check if the exception is due to a client error (4xx status codes)
+     * Check if the exception is due to a client error (4xx status codes).
      */
     public function isClientError(): bool
     {
@@ -36,7 +34,7 @@ class FluxApiException extends Exception
     }
 
     /**
-     * Check if the exception is due to a server error (5xx status codes)
+     * Check if the exception is due to a server error (5xx status codes).
      */
     public function isServerError(): bool
     {
@@ -44,7 +42,7 @@ class FluxApiException extends Exception
     }
 
     /**
-     * Get a user-friendly error message based on the HTTP status code
+     * Get a user-friendly error message based on the HTTP status code.
      */
     public function getFriendlyMessage(): string
     {

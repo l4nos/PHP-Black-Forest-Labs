@@ -15,7 +15,6 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR12' => true,
-        '@PhpCsFixer' => true,
         'array_syntax' => ['syntax' => 'short'],
         'binary_operator_spaces' => [
             'default' => 'single_space',
@@ -106,7 +105,6 @@ return (new PhpCsFixer\Config())
         'phpdoc_var_without_name' => true,
         'return_type_declaration' => true,
         'semicolon_after_instruction' => true,
-        'single_blank_line_before_namespace' => true,
         'single_class_element_per_statement' => [
             'elements' => ['property']
         ],

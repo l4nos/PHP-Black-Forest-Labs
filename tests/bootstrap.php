@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Test Bootstrap - Additional safety measures to prevent real API calls
+ * Test Bootstrap - Additional safety measures to prevent real API calls.
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -23,7 +23,7 @@ if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
 if (class_exists('GuzzleHttp\Client')) {
     // This would catch any unmocked HTTP clients in tests
     $originalAutoload = spl_autoload_functions();
-    
+
     echo "🧪 Test bootstrap loaded - All HTTP requests will be mocked\n";
     echo "⚠️  Real API calls are BLOCKED in test environment\n";
 }

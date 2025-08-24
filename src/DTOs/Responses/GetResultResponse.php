@@ -7,9 +7,8 @@ namespace Lanos\PHPBFL\DTOs\Responses;
 use Lanos\PHPBFL\Enums\ResultStatus;
 
 /**
- * Response data for task result queries
+ * Response data for task result queries.
  *
- * @package Lanos\PHPBFL\DTOs\Responses
  * @author Lanos <https://github.com/l4nos>
  */
 class GetResultResponse
@@ -29,10 +28,11 @@ class GetResultResponse
         public readonly ?float $progress = null,
         public readonly ?array $details = null,
         public readonly ?array $preview = null,
-    ) {}
+    ) {
+    }
 
     /**
-     * Create instance from API response array
+     * Create instance from API response array.
      *
      * @param array<string, mixed> $data
      */
@@ -49,7 +49,7 @@ class GetResultResponse
     }
 
     /**
-     * Convert to array
+     * Convert to array.
      *
      * @return array<string, mixed>
      */
@@ -66,7 +66,7 @@ class GetResultResponse
     }
 
     /**
-     * Check if the task is complete
+     * Check if the task is complete.
      */
     public function isComplete(): bool
     {
@@ -74,7 +74,7 @@ class GetResultResponse
     }
 
     /**
-     * Check if the task failed
+     * Check if the task failed.
      */
     public function isFailed(): bool
     {
@@ -82,7 +82,7 @@ class GetResultResponse
     }
 
     /**
-     * Check if the task was successful
+     * Check if the task was successful.
      */
     public function isSuccessful(): bool
     {
@@ -90,7 +90,7 @@ class GetResultResponse
     }
 
     /**
-     * Check if the task is still in progress
+     * Check if the task is still in progress.
      */
     public function isInProgress(): bool
     {
@@ -98,7 +98,7 @@ class GetResultResponse
     }
 
     /**
-     * Get the result as an array if it's an array, otherwise null
+     * Get the result as an array if it's an array, otherwise null.
      *
      * @return array<string, mixed>|null
      */
@@ -108,7 +108,7 @@ class GetResultResponse
     }
 
     /**
-     * Get the result as a string if it's a string, otherwise null
+     * Get the result as a string if it's a string, otherwise null.
      */
     public function getResultAsString(): ?string
     {
@@ -116,7 +116,7 @@ class GetResultResponse
     }
 
     /**
-     * Get progress as a percentage (0-100)
+     * Get progress as a percentage (0-100).
      */
     public function getProgressPercentage(): ?float
     {

@@ -17,7 +17,7 @@ class ImageRequestBuilderTest extends TestCase
     public function test_can_create_builder_instance(): void
     {
         $builder = ImageRequestBuilder::create();
-        
+
         $this->assertInstanceOf(ImageRequestBuilder::class, $builder);
     }
 
@@ -25,9 +25,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withPrompt('A beautiful landscape');
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame('A beautiful landscape', $request->prompt);
     }
 
@@ -35,9 +35,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withImagePrompt('base64-encoded-image');
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame('base64-encoded-image', $request->imagePrompt);
     }
 
@@ -45,9 +45,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withDimensions(512, 768);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(512, $request->width);
         $this->assertSame(768, $request->height);
     }
@@ -56,9 +56,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withAspectRatio('16:9', 1024);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(1024, $request->width);
         $this->assertSame(576, $request->height); // 1024 * 9/16 rounded to nearest 32
     }
@@ -67,9 +67,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withAspectRatio('1:1', 1024);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(1024, $request->width);
         $this->assertSame(1024, $request->height);
     }
@@ -78,9 +78,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withAspectRatio('9:16', 768);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(768, $request->height);
         $this->assertSame(448, $request->width); // 768 * 9/16 = 432, rounded to nearest 32 = 448
     }
@@ -89,9 +89,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withSteps(50);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(50, $request->steps);
     }
 
@@ -99,9 +99,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withPromptUpsampling();
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertTrue($request->promptUpsampling);
     }
 
@@ -109,9 +109,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withPromptUpsampling(false);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertFalse($request->promptUpsampling);
     }
 
@@ -119,9 +119,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withSeed(12345);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(12345, $request->seed);
     }
 
@@ -129,9 +129,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withRandomSeed();
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertIsInt($request->seed);
         $this->assertGreaterThan(0, $request->seed);
     }
@@ -140,9 +140,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withGuidance(3.5);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(3.5, $request->guidance);
     }
 
@@ -150,9 +150,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withInterval(2.5);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(2.5, $request->interval);
     }
 
@@ -160,9 +160,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withSafetyTolerance(4);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(4, $request->safetyTolerance);
     }
 
@@ -170,9 +170,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withOutputFormat(OutputFormat::PNG);
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(OutputFormat::PNG, $request->outputFormat);
     }
 
@@ -180,9 +180,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->asJpeg();
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(OutputFormat::JPEG, $request->outputFormat);
     }
 
@@ -190,9 +190,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->asPng();
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame(OutputFormat::PNG, $request->outputFormat);
     }
 
@@ -200,9 +200,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withWebhook('https://example.com/webhook', 'secret123');
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame('https://example.com/webhook', $request->webhookUrl);
         $this->assertSame('secret123', $request->webhookSecret);
     }
@@ -211,9 +211,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withWebhook('https://example.com/webhook');
-        
+
         $request = $builder->buildFlux1Pro();
-        
+
         $this->assertSame('https://example.com/webhook', $request->webhookUrl);
         $this->assertNull($request->webhookSecret);
     }
@@ -224,9 +224,9 @@ class ImageRequestBuilderTest extends TestCase
             ->withPrompt('Test prompt')
             ->withDimensions(1024, 768)
             ->withSteps(30);
-        
+
         $array = $builder->buildArray();
-        
+
         $this->assertArrayHasKey('prompt', $array);
         $this->assertArrayHasKey('width', $array);
         $this->assertArrayHasKey('height', $array);
@@ -241,9 +241,9 @@ class ImageRequestBuilderTest extends TestCase
     {
         $builder = ImageRequestBuilder::create()
             ->withDimensions(512, 512);
-        
+
         $array = $builder->buildArray();
-        
+
         $this->assertArrayNotHasKey('prompt', $array);
         $this->assertArrayNotHasKey('image_prompt', $array);
         $this->assertArrayNotHasKey('seed', $array);
@@ -262,7 +262,7 @@ class ImageRequestBuilderTest extends TestCase
             ->asPng()
             ->withRandomSeed()
             ->buildFlux1Pro();
-        
+
         $this->assertInstanceOf(Flux1ProRequest::class, $request);
         $this->assertSame('A magical castle', $request->prompt);
         $this->assertSame(1024, $request->width);
@@ -277,7 +277,7 @@ class ImageRequestBuilderTest extends TestCase
     public function test_uses_default_values(): void
     {
         $request = ImageRequestBuilder::create()->buildFlux1Pro();
-        
+
         $this->assertSame(1024, $request->width);
         $this->assertSame(768, $request->height);
         $this->assertSame(40, $request->steps);

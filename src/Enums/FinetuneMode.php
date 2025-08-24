@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\Enums;
 
 /**
- * Finetune mode enumeration for training configuration
+ * Finetune mode enumeration for training configuration.
  *
- * @package Lanos\PHPBFL\Enums
  * @author Lanos <https://github.com/l4nos>
  */
 enum FinetuneMode: string
@@ -18,7 +17,7 @@ enum FinetuneMode: string
     case PRODUCT = 'product';
 
     /**
-     * Get a description of what this mode is optimized for
+     * Get a description of what this mode is optimized for.
      */
     public function getDescription(): string
     {

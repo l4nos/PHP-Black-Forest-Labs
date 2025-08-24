@@ -7,9 +7,8 @@ namespace Lanos\PHPBFL\DTOs\Requests;
 use Lanos\PHPBFL\Enums\OutputFormat;
 
 /**
- * Request data for FLUX1 Pro image generation
+ * Request data for FLUX1 Pro image generation.
  *
- * @package Lanos\PHPBFL\DTOs\Requests
  * @author Lanos <https://github.com/l4nos>
  */
 class Flux1ProRequest
@@ -43,10 +42,11 @@ class Flux1ProRequest
         public OutputFormat $outputFormat = OutputFormat::JPEG,
         public ?string $webhookUrl = null,
         public ?string $webhookSecret = null,
-    ) {}
+    ) {
+    }
 
     /**
-     * Create instance from array
+     * Create instance from array.
      *
      * @param array<string, mixed> $data
      */
@@ -70,7 +70,7 @@ class Flux1ProRequest
     }
 
     /**
-     * Convert to API request array
+     * Convert to API request array.
      *
      * @return array<string, mixed>
      */
@@ -112,7 +112,7 @@ class Flux1ProRequest
     }
 
     /**
-     * Validate the request parameters
+     * Validate the request parameters.
      *
      * @return array<string> Array of validation errors
      */

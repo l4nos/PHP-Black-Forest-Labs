@@ -28,7 +28,7 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
@@ -54,7 +54,7 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
@@ -62,7 +62,7 @@ class ImageGenerationServiceTest extends TestCase
             'prompt' => 'A cyberpunk city',
             'width' => 1024,
             'height' => 768,
-            'steps' => 28
+            'steps' => 28,
         ];
 
         $response = $service->flux1Dev($params);
@@ -75,14 +75,14 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
         $params = [
             'prompt' => 'A magical forest',
             'width' => 1024,
-            'height' => 1024
+            'height' => 1024,
         ];
 
         $response = $service->flux11Pro($params);
@@ -95,14 +95,14 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
         $params = [
             'prompt' => 'An abstract artwork',
             'aspect_ratio' => '16:9',
-            'raw' => true
+            'raw' => true,
         ];
 
         $response = $service->flux11ProUltra($params);
@@ -114,14 +114,14 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
         $params = [
             'prompt' => 'Transform this image',
             'input_image' => base64_encode('fake-image-data'),
-            'aspect_ratio' => '1:1'
+            'aspect_ratio' => '1:1',
         ];
 
         $response = $service->fluxKontextPro($params);
@@ -133,13 +133,13 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
         $params = [
             'prompt' => 'Edit this image creatively',
-            'input_image' => base64_encode('fake-image-data')
+            'input_image' => base64_encode('fake-image-data'),
         ];
 
         $response = $service->fluxKontextMax($params);
@@ -159,14 +159,14 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
         $params = [
             'image' => base64_encode('fake-image-data'),
             'mask' => base64_encode('fake-mask-data'),
-            'prompt' => 'Fill with flowers'
+            'prompt' => 'Fill with flowers',
         ];
 
         $response = $service->flux1Fill($params);
@@ -186,7 +186,7 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
@@ -195,7 +195,7 @@ class ImageGenerationServiceTest extends TestCase
             'top' => 200,
             'bottom' => 100,
             'left' => 150,
-            'right' => 150
+            'right' => 150,
         ];
 
         $response = $service->flux1Expand($params);
@@ -215,7 +215,7 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
@@ -223,7 +223,7 @@ class ImageGenerationServiceTest extends TestCase
             'prompt' => 'A realistic portrait',
             'control_image' => base64_encode('fake-edge-data'),
             'canny_low_threshold' => 50,
-            'canny_high_threshold' => 200
+            'canny_high_threshold' => 200,
         ];
 
         $response = $service->flux1Canny($params);
@@ -243,14 +243,14 @@ class ImageGenerationServiceTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($taskResponse)
+            $this->createJsonResponse($taskResponse),
         ]);
         $service = new ImageGenerationService($client);
 
         $params = [
             'prompt' => 'A landscape with depth',
             'control_image' => base64_encode('fake-depth-data'),
-            'guidance' => 15.0
+            'guidance' => 15.0,
         ];
 
         $response = $service->flux1Depth($params);

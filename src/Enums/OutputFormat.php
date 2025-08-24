@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\Enums;
 
 /**
- * Output format enumeration for image generation
+ * Output format enumeration for image generation.
  *
- * @package Lanos\PHPBFL\Enums
  * @author Lanos <https://github.com/l4nos>
  */
 enum OutputFormat: string
@@ -16,7 +15,7 @@ enum OutputFormat: string
     case PNG = 'png';
 
     /**
-     * Get the MIME type for the format
+     * Get the MIME type for the format.
      */
     public function getMimeType(): string
     {
@@ -27,7 +26,7 @@ enum OutputFormat: string
     }
 
     /**
-     * Get the file extension for the format
+     * Get the file extension for the format.
      */
     public function getExtension(): string
     {

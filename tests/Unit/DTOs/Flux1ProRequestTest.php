@@ -16,7 +16,7 @@ class Flux1ProRequestTest extends TestCase
     public function test_can_be_instantiated_with_defaults(): void
     {
         $request = new Flux1ProRequest();
-        
+
         $this->assertNull($request->prompt);
         $this->assertNull($request->imagePrompt);
         $this->assertSame(1024, $request->width);
@@ -47,7 +47,7 @@ class Flux1ProRequestTest extends TestCase
             webhookUrl: 'https://example.com/webhook',
             webhookSecret: 'secret123'
         );
-        
+
         $this->assertSame('A beautiful sunset', $request->prompt);
         $this->assertSame('base64-image', $request->imagePrompt);
         $this->assertSame(512, $request->width);
@@ -78,11 +78,11 @@ class Flux1ProRequestTest extends TestCase
             'safety_tolerance' => 3,
             'output_format' => 'png',
             'webhook_url' => 'https://test.com',
-            'webhook_secret' => 'test-secret'
+            'webhook_secret' => 'test-secret',
         ];
-        
+
         $request = Flux1ProRequest::fromArray($data);
-        
+
         $this->assertSame('Test prompt', $request->prompt);
         $this->assertSame('base64-data', $request->imagePrompt);
         $this->assertSame(512, $request->width);
@@ -101,9 +101,9 @@ class Flux1ProRequestTest extends TestCase
     public function test_from_array_uses_defaults_for_missing_values(): void
     {
         $data = ['prompt' => 'Minimal prompt'];
-        
+
         $request = Flux1ProRequest::fromArray($data);
-        
+
         $this->assertSame('Minimal prompt', $request->prompt);
         $this->assertSame(1024, $request->width);
         $this->assertSame(768, $request->height);
@@ -118,9 +118,9 @@ class Flux1ProRequestTest extends TestCase
             height: 512,
             steps: 25
         );
-        
+
         $array = $request->toArray();
-        
+
         $this->assertArrayHasKey('prompt', $array);
         $this->assertArrayHasKey('width', $array);
         $this->assertArrayHasKey('height', $array);
@@ -134,9 +134,9 @@ class Flux1ProRequestTest extends TestCase
     public function test_to_array_excludes_null_optional_values(): void
     {
         $request = new Flux1ProRequest();
-        
+
         $array = $request->toArray();
-        
+
         $this->assertArrayNotHasKey('prompt', $array);
         $this->assertArrayNotHasKey('image_prompt', $array);
         $this->assertArrayNotHasKey('seed', $array);
@@ -155,72 +155,72 @@ class Flux1ProRequestTest extends TestCase
             interval: 2.0,
             safetyTolerance: 2
         );
-        
+
         $errors = $request->validate();
-        
+
         $this->assertEmpty($errors);
     }
 
     public function test_validate_returns_error_for_invalid_width(): void
     {
         $request = new Flux1ProRequest(width: 100); // Not multiple of 32
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Width must be a multiple of 32 and at least 32 pixels', $errors);
     }
 
     public function test_validate_returns_error_for_invalid_height(): void
     {
         $request = new Flux1ProRequest(height: 50); // Not multiple of 32
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Height must be a multiple of 32 and at least 32 pixels', $errors);
     }
 
     public function test_validate_returns_error_for_invalid_steps(): void
     {
         $request = new Flux1ProRequest(steps: 0);
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Steps must be between 1 and 100', $errors);
     }
 
     public function test_validate_returns_error_for_invalid_guidance(): void
     {
         $request = new Flux1ProRequest(guidance: 1.0);
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Guidance must be between 1.5 and 5.0', $errors);
     }
 
     public function test_validate_returns_error_for_invalid_interval(): void
     {
         $request = new Flux1ProRequest(interval: 0.5);
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Interval must be between 1.0 and 4.0', $errors);
     }
 
     public function test_validate_returns_error_for_invalid_safety_tolerance(): void
     {
         $request = new Flux1ProRequest(safetyTolerance: 10);
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Safety tolerance must be between 0 and 6', $errors);
     }
 
     public function test_validate_returns_error_when_no_prompt_or_image_prompt(): void
     {
         $request = new Flux1ProRequest();
-        
+
         $errors = $request->validate();
-        
+
         $this->assertContains('Either prompt or image_prompt must be provided', $errors);
     }
 
@@ -232,9 +232,9 @@ class Flux1ProRequestTest extends TestCase
             steps: 0,      // Invalid
             guidance: 1.0  // Invalid
         );
-        
+
         $errors = $request->validate();
-        
+
         $this->assertCount(5, $errors); // 4 parameter errors + missing prompt error
     }
 
@@ -245,9 +245,9 @@ class Flux1ProRequestTest extends TestCase
             width: 1024,
             height: 768
         );
-        
+
         $errors = $request->validate();
-        
+
         $this->assertEmpty($errors);
     }
 }

@@ -28,7 +28,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse();
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -52,7 +52,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse('Ready');
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -105,7 +105,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse('Ready');
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -118,7 +118,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse('Ready');
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -131,7 +131,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse('Pending');
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -144,7 +144,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse('Pending');
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -160,7 +160,7 @@ class UtilityServiceTest extends TestCase
             ['progress' => null]
         );
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 
@@ -176,7 +176,7 @@ class UtilityServiceTest extends TestCase
     {
         $resultData = $this->getSampleResultResponse($status);
         $client = $this->createMockClient([
-            $this->createJsonResponse($resultData)
+            $this->createJsonResponse($resultData),
         ]);
         $service = new UtilityService($client);
 

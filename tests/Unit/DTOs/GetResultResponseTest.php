@@ -23,7 +23,7 @@ class GetResultResponseTest extends TestCase
             details: ['model' => 'flux-pro'],
             preview: ['thumbnail' => 'url']
         );
-        
+
         $this->assertSame('task_123', $response->id);
         $this->assertSame(ResultStatus::READY, $response->status);
         $this->assertSame('https://example.com/image.jpg', $response->result);
@@ -40,11 +40,11 @@ class GetResultResponseTest extends TestCase
             'result' => null,
             'progress' => 50.5,
             'details' => ['step' => 'processing'],
-            'preview' => null
+            'preview' => null,
         ];
-        
+
         $response = GetResultResponse::fromArray($data);
-        
+
         $this->assertSame('task_456', $response->id);
         $this->assertSame(ResultStatus::PENDING, $response->status);
         $this->assertNull($response->result);
@@ -57,11 +57,11 @@ class GetResultResponseTest extends TestCase
     {
         $data = [
             'id' => 'task_789',
-            'status' => 'Ready'
+            'status' => 'Ready',
         ];
-        
+
         $response = GetResultResponse::fromArray($data);
-        
+
         $this->assertSame('task_789', $response->id);
         $this->assertSame(ResultStatus::READY, $response->status);
         $this->assertNull($response->result);
@@ -78,65 +78,65 @@ class GetResultResponseTest extends TestCase
             result: 'image_url',
             progress: 100.0
         );
-        
+
         $array = $response->toArray();
-        
+
         $this->assertSame([
             'id' => 'task_test',
             'status' => 'Ready',
             'result' => 'image_url',
             'progress' => 100.0,
             'details' => null,
-            'preview' => null
+            'preview' => null,
         ], $array);
     }
 
     public function test_is_complete_returns_true_for_ready_status(): void
     {
         $response = new GetResultResponse('task', ResultStatus::READY);
-        
+
         $this->assertTrue($response->isComplete());
     }
 
     public function test_is_complete_returns_true_for_error_status(): void
     {
         $response = new GetResultResponse('task', ResultStatus::ERROR);
-        
+
         $this->assertTrue($response->isComplete());
     }
 
     public function test_is_complete_returns_false_for_pending_status(): void
     {
         $response = new GetResultResponse('task', ResultStatus::PENDING);
-        
+
         $this->assertFalse($response->isComplete());
     }
 
     public function test_is_failed_returns_true_for_error_status(): void
     {
         $response = new GetResultResponse('task', ResultStatus::ERROR);
-        
+
         $this->assertTrue($response->isFailed());
     }
 
     public function test_is_failed_returns_true_for_content_moderated(): void
     {
         $response = new GetResultResponse('task', ResultStatus::CONTENT_MODERATED);
-        
+
         $this->assertTrue($response->isFailed());
     }
 
     public function test_is_failed_returns_false_for_ready_status(): void
     {
         $response = new GetResultResponse('task', ResultStatus::READY);
-        
+
         $this->assertFalse($response->isFailed());
     }
 
     public function test_is_successful_returns_true_only_for_ready(): void
     {
         $response = new GetResultResponse('task', ResultStatus::READY);
-        
+
         $this->assertTrue($response->isSuccessful());
     }
 
@@ -146,9 +146,9 @@ class GetResultResponseTest extends TestCase
             ResultStatus::PENDING,
             ResultStatus::ERROR,
             ResultStatus::CONTENT_MODERATED,
-            ResultStatus::TASK_NOT_FOUND
+            ResultStatus::TASK_NOT_FOUND,
         ];
-        
+
         foreach ($statuses as $status) {
             $response = new GetResultResponse('task', $status);
             $this->assertFalse($response->isSuccessful(), "Status {$status->value} should not be successful");
@@ -158,14 +158,14 @@ class GetResultResponseTest extends TestCase
     public function test_is_in_progress_returns_true_for_pending_status(): void
     {
         $response = new GetResultResponse('task', ResultStatus::PENDING);
-        
+
         $this->assertTrue($response->isInProgress());
     }
 
     public function test_is_in_progress_returns_true_for_request_moderated(): void
     {
         $response = new GetResultResponse('task', ResultStatus::REQUEST_MODERATED);
-        
+
         $this->assertTrue($response->isInProgress());
     }
 
@@ -175,9 +175,9 @@ class GetResultResponseTest extends TestCase
             ResultStatus::READY,
             ResultStatus::ERROR,
             ResultStatus::CONTENT_MODERATED,
-            ResultStatus::TASK_NOT_FOUND
+            ResultStatus::TASK_NOT_FOUND,
         ];
-        
+
         foreach ($statuses as $status) {
             $response = new GetResultResponse('task', $status);
             $this->assertFalse($response->isInProgress(), "Status {$status->value} should not be in progress");
@@ -188,42 +188,42 @@ class GetResultResponseTest extends TestCase
     {
         $arrayResult = ['images' => ['url1', 'url2']];
         $response = new GetResultResponse('task', ResultStatus::READY, $arrayResult);
-        
+
         $this->assertSame($arrayResult, $response->getResultAsArray());
     }
 
     public function test_get_result_as_array_returns_null_for_non_array(): void
     {
         $response = new GetResultResponse('task', ResultStatus::READY, 'string result');
-        
+
         $this->assertNull($response->getResultAsArray());
     }
 
     public function test_get_result_as_string_returns_string_result(): void
     {
         $response = new GetResultResponse('task', ResultStatus::READY, 'https://example.com/image.jpg');
-        
+
         $this->assertSame('https://example.com/image.jpg', $response->getResultAsString());
     }
 
     public function test_get_result_as_string_returns_null_for_non_string(): void
     {
         $response = new GetResultResponse('task', ResultStatus::READY, ['array' => 'result']);
-        
+
         $this->assertNull($response->getResultAsString());
     }
 
     public function test_get_progress_percentage_returns_progress(): void
     {
         $response = new GetResultResponse('task', ResultStatus::PENDING, progress: 75.5);
-        
+
         $this->assertSame(75.5, $response->getProgressPercentage());
     }
 
     public function test_get_progress_percentage_returns_null_when_no_progress(): void
     {
         $response = new GetResultResponse('task', ResultStatus::PENDING);
-        
+
         $this->assertNull($response->getProgressPercentage());
     }
 }

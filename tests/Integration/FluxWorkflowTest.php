@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\Tests\Integration;
 
 use Lanos\PHPBFL\Builders\ImageRequestBuilder;
-use Lanos\PHPBFL\DTOs\Responses\ImageGenerationResponse;
 use Lanos\PHPBFL\DTOs\Responses\GetResultResponse;
+use Lanos\PHPBFL\DTOs\Responses\ImageGenerationResponse;
 use Lanos\PHPBFL\Enums\OutputFormat;
 use Lanos\PHPBFL\Enums\ResultStatus;
 use Lanos\PHPBFL\Tests\TestCase;
 
 /**
- * Integration tests for complete FLUX API workflows
+ * Integration tests for complete FLUX API workflows.
  *
  * @covers \Lanos\PHPBFL\FluxClient
  * @covers \Lanos\PHPBFL\Services\ImageGenerationService
@@ -27,11 +27,11 @@ class FluxWorkflowTest extends TestCase
         $taskResponse = $this->getSampleTaskResponse();
         $pendingResponse = $this->getSampleResultResponse('Pending');
         $completedResponse = $this->getSampleResultResponse('Ready', 'https://example.com/generated.jpg');
-        
+
         $client = $this->createMockClient([
             $this->createJsonResponse($taskResponse),        // Initial submission
             $this->createJsonResponse($pendingResponse),     // First poll - still pending
-            $this->createJsonResponse($completedResponse)    // Second poll - completed
+            $this->createJsonResponse($completedResponse),    // Second poll - completed
         ]);
 
         // Step 1: Build a request using the fluent builder
@@ -45,14 +45,14 @@ class FluxWorkflowTest extends TestCase
 
         // Step 2: Submit the generation request
         $submissionResponse = $client->imageGeneration()->flux1Pro($request);
-        
+
         $this->assertInstanceOf(ImageGenerationResponse::class, $submissionResponse);
         $this->assertSame($taskResponse['id'], $submissionResponse->id);
         $this->assertSame($taskResponse['polling_url'], $submissionResponse->pollingUrl);
 
         // Step 3: Poll for the result (first poll - still pending)
         $firstPollResult = $client->utility()->getResult($submissionResponse->id);
-        
+
         $this->assertInstanceOf(GetResultResponse::class, $firstPollResult);
         $this->assertSame(ResultStatus::PENDING, $firstPollResult->status);
         $this->assertTrue($firstPollResult->isInProgress());
@@ -60,7 +60,7 @@ class FluxWorkflowTest extends TestCase
 
         // Step 4: Poll again (now completed)
         $finalResult = $client->utility()->getResult($submissionResponse->id);
-        
+
         $this->assertInstanceOf(GetResultResponse::class, $finalResult);
         $this->assertSame(ResultStatus::READY, $finalResult->status);
         $this->assertTrue($finalResult->isComplete());
@@ -73,10 +73,10 @@ class FluxWorkflowTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $completedResponse = $this->getSampleResultResponse('Ready', 'https://example.com/filled.jpg');
-        
+
         $client = $this->createMockClient([
             $this->createJsonResponse($taskResponse),
-            $this->createJsonResponse($completedResponse)
+            $this->createJsonResponse($completedResponse),
         ]);
 
         // Step 1: Submit fill request
@@ -86,14 +86,14 @@ class FluxWorkflowTest extends TestCase
             'prompt' => 'Fill with beautiful flowers',
             'steps' => 40,
             'guidance' => 50.0,
-            'output_format' => OutputFormat::JPEG->value
+            'output_format' => OutputFormat::JPEG->value,
         ]);
 
         $this->assertInstanceOf(ImageGenerationResponse::class, $fillResponse);
-        
+
         // Step 2: Get the result
         $result = $client->utility()->getResult($fillResponse->id);
-        
+
         $this->assertTrue($result->isSuccessful());
         $this->assertSame('https://example.com/filled.jpg', $result->getResultAsString());
     }
@@ -102,22 +102,22 @@ class FluxWorkflowTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $errorResponse = $this->getSampleResultResponse('Error');
-        
+
         $client = $this->createMockClient([
             $this->createJsonResponse($taskResponse),
-            $this->createJsonResponse($errorResponse)
+            $this->createJsonResponse($errorResponse),
         ]);
 
         // Submit a request
         $request = ImageRequestBuilder::create()
             ->withPrompt('Test prompt')
             ->buildFlux1Pro();
-        
+
         $submissionResponse = $client->imageGeneration()->flux1Pro($request);
-        
+
         // Check the error result
         $result = $client->utility()->getResult($submissionResponse->id);
-        
+
         $this->assertSame(ResultStatus::ERROR, $result->status);
         $this->assertTrue($result->isComplete());
         $this->assertTrue($result->isFailed());
@@ -129,20 +129,20 @@ class FluxWorkflowTest extends TestCase
     {
         $taskResponse = $this->getSampleTaskResponse();
         $moderatedResponse = $this->getSampleResultResponse('Content Moderated');
-        
+
         $client = $this->createMockClient([
             $this->createJsonResponse($taskResponse),
-            $this->createJsonResponse($moderatedResponse)
+            $this->createJsonResponse($moderatedResponse),
         ]);
 
         $request = ImageRequestBuilder::create()
             ->withPrompt('Some inappropriate content')
             ->withSafetyTolerance(0) // Strictest setting
             ->buildFlux1Pro();
-        
+
         $submissionResponse = $client->imageGeneration()->flux1Pro($request);
         $result = $client->utility()->getResult($submissionResponse->id);
-        
+
         $this->assertSame(ResultStatus::CONTENT_MODERATED, $result->status);
         $this->assertTrue($result->isComplete());
         $this->assertTrue($result->isFailed());
@@ -156,17 +156,17 @@ class FluxWorkflowTest extends TestCase
             'finetune_details' => [
                 'id' => 'ft_abc123',
                 'status' => 'completed',
-                'trigger_word' => 'MYSTYLE'
-            ]
+                'trigger_word' => 'MYSTYLE',
+            ],
         ];
         $taskResponse = $this->getSampleTaskResponse();
         $completedResponse = $this->getSampleResultResponse('Ready', 'https://example.com/finetuned.jpg');
-        
+
         $client = $this->createMockClient([
             $this->createJsonResponse($finetunesListResponse),   // List finetunes
             $this->createJsonResponse($finetuneDetailsResponse), // Get details
             $this->createJsonResponse($taskResponse),            // Generate with finetune
-            $this->createJsonResponse($completedResponse)        // Get result
+            $this->createJsonResponse($completedResponse),        // Get result
         ]);
 
         // Step 1: List existing finetunes
@@ -185,7 +185,7 @@ class FluxWorkflowTest extends TestCase
             'finetune_strength' => 1.2,
             'steps' => 40,
             'width' => 1024,
-            'height' => 1024
+            'height' => 1024,
         ]);
 
         $this->assertInstanceOf(ImageGenerationResponse::class, $generateResponse);
@@ -201,18 +201,18 @@ class FluxWorkflowTest extends TestCase
         $taskResponses = [
             $this->getSampleTaskResponse(),
             $this->getSampleTaskResponse(),
-            $this->getSampleTaskResponse()
+            $this->getSampleTaskResponse(),
         ];
-        
+
         $completedResponses = [
             $this->getSampleResultResponse('Ready', 'https://example.com/image1.jpg'),
             $this->getSampleResultResponse('Ready', 'https://example.com/image2.jpg'),
-            $this->getSampleResultResponse('Ready', 'https://example.com/image3.jpg')
+            $this->getSampleResultResponse('Ready', 'https://example.com/image3.jpg'),
         ];
 
         $mockResponses = array_merge(
-            array_map(fn($task) => $this->createJsonResponse($task), $taskResponses),
-            array_map(fn($result) => $this->createJsonResponse($result), $completedResponses)
+            array_map(fn ($task) => $this->createJsonResponse($task), $taskResponses),
+            array_map(fn ($result) => $this->createJsonResponse($result), $completedResponses)
         );
 
         $client = $this->createMockClient($mockResponses);
@@ -220,7 +220,7 @@ class FluxWorkflowTest extends TestCase
         $prompts = [
             'A serene mountain lake at sunset',
             'A bustling cyberpunk street scene',
-            'A magical forest with glowing mushrooms'
+            'A magical forest with glowing mushrooms',
         ];
 
         $submittedTasks = [];
@@ -232,7 +232,7 @@ class FluxWorkflowTest extends TestCase
                 ->withDimensions(512, 512)
                 ->withSteps(30)
                 ->buildFlux1Pro();
-            
+
             $response = $client->imageGeneration()->flux1Pro($request);
             $submittedTasks[] = $response;
         }
@@ -243,7 +243,7 @@ class FluxWorkflowTest extends TestCase
         foreach ($submittedTasks as $index => $task) {
             $result = $client->utility()->getResult($task->id);
             $this->assertTrue($result->isSuccessful());
-            $this->assertStringContainsString("image" . ($index + 1), (string) $result->getResultAsString());
+            $this->assertStringContainsString('image' . ($index + 1), (string) $result->getResultAsString());
         }
     }
 }

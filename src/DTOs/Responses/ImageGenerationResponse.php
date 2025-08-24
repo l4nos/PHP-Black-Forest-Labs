@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\DTOs\Responses;
 
 /**
- * Response data for image generation task submission
+ * Response data for image generation task submission.
  *
- * @package Lanos\PHPBFL\DTOs\Responses
  * @author Lanos <https://github.com/l4nos>
  */
 class ImageGenerationResponse
@@ -19,10 +18,11 @@ class ImageGenerationResponse
     public function __construct(
         public readonly string $id,
         public readonly string $pollingUrl,
-    ) {}
+    ) {
+    }
 
     /**
-     * Create instance from API response array
+     * Create instance from API response array.
      *
      * @param array<string, mixed> $data
      */
@@ -35,7 +35,7 @@ class ImageGenerationResponse
     }
 
     /**
-     * Convert to array
+     * Convert to array.
      *
      * @return array<string, mixed>
      */
@@ -48,7 +48,7 @@ class ImageGenerationResponse
     }
 
     /**
-     * Extract the task ID from polling URL if needed
+     * Extract the task ID from polling URL if needed.
      */
     public function getTaskId(): string
     {

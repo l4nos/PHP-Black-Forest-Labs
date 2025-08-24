@@ -3,18 +3,18 @@
 declare(strict_types=1);
 
 /**
- * Basic Image Generation Example
- * 
+ * Basic Image Generation Example.
+ *
  * This example demonstrates how to generate images using the FLUX API SDK
  * with the most common parameters and error handling patterns.
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Lanos\PHPBFL\FluxClient;
 use Lanos\PHPBFL\Builders\ImageRequestBuilder;
-use Lanos\PHPBFL\Exceptions\FluxApiException;
 use Lanos\PHPBFL\Exceptions\AuthenticationException;
+use Lanos\PHPBFL\Exceptions\FluxApiException;
+use Lanos\PHPBFL\FluxClient;
 
 // Initialize client with your API key
 $apiKey = getenv('BFL_API_KEY') ?: 'your-api-key-here';
@@ -25,7 +25,7 @@ try {
 
     // Example 1: Simple prompt with FLUX1 Pro
     echo "📝 Generating image with simple prompt...\n";
-    
+
     $request = ImageRequestBuilder::create()
         ->withPrompt('A majestic dragon soaring through fluffy white clouds at golden sunset')
         ->withDimensions(1024, 768)
@@ -34,7 +34,7 @@ try {
         ->buildFlux1Pro();
 
     $response = $client->imageGeneration()->flux1Pro($request);
-    
+
     echo "✅ Task submitted! ID: {$response->id}\n";
     echo "🔄 Polling URL: {$response->pollingUrl}\n\n";
 
@@ -46,7 +46,7 @@ try {
         $imageUrl = $result->getResultAsString();
         echo "🎉 Generation successful!\n";
         echo "🖼️  Image URL: $imageUrl\n\n";
-        
+
         // Optionally download the image
         if ($imageUrl) {
             $imageData = file_get_contents($imageUrl);
@@ -57,13 +57,13 @@ try {
     } else {
         echo "❌ Generation failed with status: {$result->status->value}\n";
         if ($result->details) {
-            echo "📋 Details: " . json_encode($result->details, JSON_PRETTY_PRINT) . "\n";
+            echo '📋 Details: ' . json_encode($result->details, JSON_PRETTY_PRINT) . "\n";
         }
     }
 
     // Example 2: Generate with different aspect ratio
     echo "📝 Generating landscape image...\n";
-    
+
     $landscapeRequest = ImageRequestBuilder::create()
         ->withPrompt('A serene mountain landscape with a crystal clear lake reflection')
         ->withAspectRatio('16:9') // Will calculate appropriate dimensions
@@ -79,16 +79,16 @@ try {
     // Poll manually to show progress
     $attempts = 0;
     $maxAttempts = 60;
-    
+
     while ($attempts < $maxAttempts) {
         $currentResult = $client->utility()->getResult($landscapeResponse->id);
-        
+
         if ($currentResult->isComplete()) {
             if ($currentResult->isSuccessful()) {
                 $landscapeUrl = $currentResult->getResultAsString();
                 echo "🎉 Landscape generation successful!\n";
                 echo "🖼️  Image URL: $landscapeUrl\n";
-                
+
                 if ($landscapeUrl) {
                     $imageData = file_get_contents($landscapeUrl);
                     $filename = 'generated_landscape_' . date('Y-m-d_H-i-s') . '.png';
@@ -100,14 +100,14 @@ try {
             }
             break;
         }
-        
+
         $progress = $currentResult->getProgressPercentage();
         if ($progress !== null) {
             echo "⏳ Progress: {$progress}%\n";
         } else {
             echo "⏳ Status: {$currentResult->status->value}\n";
         }
-        
+
         $attempts++;
         sleep(3);
     }

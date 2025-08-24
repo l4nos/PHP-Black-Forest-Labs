@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Lanos\PHPBFL\Exceptions;
 
 /**
- * Exception thrown when authentication fails
+ * Exception thrown when authentication fails.
  *
- * @package Lanos\PHPBFL\Exceptions
  * @author Lanos <https://github.com/l4nos>
  */
 class AuthenticationException extends FluxApiException
 {
     /**
-     * Create a new AuthenticationException instance
+     * Create a new AuthenticationException instance.
      *
      * @param string $message The exception message
      * @param int $code The exception code (HTTP status code, default 401)
